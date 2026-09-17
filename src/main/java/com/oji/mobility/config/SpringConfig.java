@@ -25,9 +25,9 @@ public class SpringConfig {
                 //인가방법
                         authorizeHttpRequests(auth -> auth
                         //모든 사용자에 대한 접근 => permitAll()
-                        .requestMatchers("/", "/login", "members/register", "/css/**", "/js/**", "/error", "/favicon.ico").permitAll()
+                        .requestMatchers("/", "/login", "/members/register", "/css/**", "/js/**", "/images/**", "/error", "/favicon.ico").permitAll()
                         //최고관리자(ADMIN)에 대한 접근 => hasRole("ADMIN")
-                        .requestMatchers("/adim/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         //회원(USER)에 대한 접근 => hasRole("USER")
                         .requestMatchers("/boards/new").authenticated()
                         .requestMatchers("/boards/edit/*", "/boards/delete/*").authenticated()
@@ -39,6 +39,7 @@ public class SpringConfig {
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/")
                         .failureUrl("/login?error=true")
+                        .permitAll()
                 )
                 //로그아웃 방법
                 .logout(logout -> logout
@@ -48,7 +49,7 @@ public class SpringConfig {
                         .deleteCookies("JSESSIONID")
                 )
         //예외 페이지(403 페이지)
-                .exceptionHandling(ex ->ex
+                .exceptionHandling(ex -> ex
                         .accessDeniedPage("/error/403"));
         return http.build();
     }
