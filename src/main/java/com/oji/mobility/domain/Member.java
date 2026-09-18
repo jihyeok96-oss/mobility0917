@@ -1,6 +1,8 @@
 package com.oji.mobility.domain;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 @Entity
@@ -24,7 +26,7 @@ public class Member {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(length = 30)
+    @Column(nullable = false, length = 30)
     private String tel;
 
     @Column(nullable = false, unique = true, length = 120)
@@ -35,9 +37,17 @@ public class Member {
     @Builder.Default
     private Role role = Role.USER;
 
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
     @Builder.Default
     @Column(nullable = false)
     private boolean enabled = true;
+
+    @PrePersist
+    public void preCreated() {
+        createdAt = LocalDateTime.now();
+    }
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     @Builder.Default
